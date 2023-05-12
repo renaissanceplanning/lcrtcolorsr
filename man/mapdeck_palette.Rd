@@ -7,7 +7,7 @@
 mapdeck_palette(palette = "logo", reverse = FALSE, alpha = 256)
 }
 \arguments{
-\item{palette}{A string representing a color palette, see https://bfroebrpg.github.io/rpgcolorsr_pages/
+\item{palette}{A string representing a color palette, see https://bfroebrpg.github.io/lcrtcolorsr_pages/
 for a full list of palettes}
 
 \item{reverse}{When true the default order of the color palette is reversed}

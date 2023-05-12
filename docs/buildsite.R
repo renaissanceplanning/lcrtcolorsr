@@ -1,2 +1,2 @@
-setwd("C:/Users/U_RPG/Documents/rpgcolorsr/docs")
+setwd("C:/Users/Y_RPG/Documents/GitHub/packages/lcrtcolorsr/docs")
 rmarkdown::render_site()

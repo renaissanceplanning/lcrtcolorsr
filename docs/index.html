@@ -12,19 +12,27 @@
 <meta name="author" content="Brian Froeb" />
 
 
-<title>rpgcolorsr User Guide</title>
+<title>lcrtcolorsr Examples</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -36,11 +44,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -53,32 +56,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -88,10 +67,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -108,40 +83,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -169,7 +120,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -181,7 +132,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -191,11 +142,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -207,13 +175,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -221,16 +188,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -274,7 +234,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -297,150 +257,102 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">rpgcolorsr User Guide</h1>
+<h1 class="title toc-ignore">lcrtcolorsr Examples</h1>
 <h4 class="author">Brian Froeb</h4>
-<h4 class="date">6/29/2020</h4>
+<h4 class="date">5/12/2023</h4>
 
 </div>
 
 
-<p>There are currently 71 colors included in this package the color names and their hex codes are below</p>
-<pre><code>##              shale        shale_ramp1        shale_ramp5              green        green_ramp1        green_ramp5 
-##          &quot;#3e4d54&quot;          &quot;#d6dde0&quot;          &quot;#20272b&quot;          &quot;#96a821&quot;          &quot;#f6f0d5&quot;          &quot;#4b541d&quot; 
-##               teal         teal_ramp1         teal_ramp5             orange       orange_ramp1       orange_ramp5 
-##          &quot;#3fbfba&quot;          &quot;#d7f2f1&quot;          &quot;#1f5f5e&quot;          &quot;#F29C20&quot;          &quot;#fcecd3&quot;          &quot;#F29C20&quot; 
-##               gray         gray_ramp1         gray_ramp5       bright green          sea green    sea_green_ramp1 
-##          &quot;#beb5af&quot;          &quot;#f1f0ef&quot;          &quot;#655852&quot;          &quot;#CEDB00&quot;          &quot;#218675&quot;          &quot;#c6f2eb&quot; 
-##    sea_green_ramp2               blue         blue_ramp1         blue_ramp5               navy         navy_ramp1 
-##          &quot;#10433a&quot;          &quot;#008ba6&quot;          &quot;#bff0fb&quot;          &quot;#008ba6&quot;          &quot;#40516f&quot;          &quot;#d5dbe6&quot; 
-##         navy_ramp5              black        black_ramp1        black_ramp5         chartreuse   chartreuse_ramp1 
-##          &quot;#202837&quot;          &quot;#58585B&quot;          &quot;#dcddde&quot;          &quot;#2c2d2e&quot;          &quot;#CDDC29&quot;          &quot;#f4f8d3&quot; 
-##   chartreuse_ramp5               gold         gold_ramp1         gold_ramp5       burnt orange burnt_orange_ramp1 
-##          &quot;#687012&quot;          &quot;#ffee2a&quot;          &quot;#fffcd5&quot;          &quot;#958a00&quot;          &quot;#f19d23&quot;          &quot;#fcecd3&quot; 
-## burnt_orange_ramp5                red          red_ramp1          red_ramp5             purple       light purple 
-##          &quot;#825109&quot;          &quot;#ea425a&quot;          &quot;#fbd9de&quot;          &quot;#860f21&quot;          &quot;#8400a8&quot;          &quot;#c29ed7&quot; 
-##      medium purple        gray purple        deep purple               pink           hot pink        medium pink 
-##          &quot;#7030a0&quot;          &quot;#704489&quot;          &quot;#4c0073&quot;          &quot;#e600a9&quot;          &quot;#ff00c5&quot;          &quot;#a80084&quot; 
-##        maroon pink          dark pink              earth        earth_ramp1        earth_ramp2           horizon1 
-##          &quot;#8400a8&quot;          &quot;#73004c&quot;          &quot;#edece6&quot;          &quot;#f0f2da&quot;          &quot;#d9d6ce&quot;          &quot;#c9d1d4&quot; 
-##           horizon2               cw_1               cw_2               cw_3               cw_4               cw_5 
-##          &quot;#bcd2d4&quot;          &quot;#3D4E56&quot;          &quot;#3DBFBA&quot;          &quot;#FFFFD3&quot;          &quot;#FFE607&quot;          &quot;#FFAA00&quot; 
-##              rpg_1              rpg_2              rpg_3          rainbow_1          rainbow_2          rainbow_3 
-##          &quot;#3DBFBA&quot;          &quot;#F9F963&quot;          &quot;#F29F24&quot;          &quot;#E0E0E0&quot;          &quot;#425270&quot;          &quot;#3DBFBA&quot; 
-##          rainbow_4          rainbow_5          rainbow_6          rainbow_7          rainbow_8 
-##          &quot;#95A53A&quot;          &quot;#FFED28&quot;          &quot;#FFAA00&quot;          &quot;#ED2D46&quot;          &quot;#8C50AA&quot;</code></pre>
-<p>These are grouped into 20 color palettes, the colors included in each palette and their hex codes are below</p>
+<p>There are currently 71 colors included in this package the color
+names and their hex codes are below</p>
+<pre><code>##       Sky     Ocean      Sand     Shore     Coral    Orange    Yellow     Green      Aqua      Blue 
+## &quot;#CBE8E3&quot; &quot;#343873&quot; &quot;#F3EFE7&quot; &quot;#6D6155&quot; &quot;#FF4548&quot; &quot;#F6921E&quot; &quot;#FFDA3D&quot; &quot;#8BC53F&quot; &quot;#26BBB3&quot; &quot;#00ADEE&quot; 
+##    Purple      Pink 
+## &quot;#C963FF&quot; &quot;#F291BC&quot;</code></pre>
+<p>These are grouped into 20 color palettes, the colors included in each
+palette and their hex codes are below</p>
 <pre><code>## $logo
-##     shale     green      teal    orange 
-## &quot;#3e4d54&quot; &quot;#96a821&quot; &quot;#3fbfba&quot; &quot;#F29C20&quot; 
+##       Sky     Ocean      Sand     Shore 
+## &quot;#CBE8E3&quot; &quot;#343873&quot; &quot;#F3EFE7&quot; &quot;#6D6155&quot; 
 ## 
-## $additional
-##         gray bright green    sea green         blue         navy        black 
-##    &quot;#beb5af&quot;    &quot;#CEDB00&quot;    &quot;#218675&quot;    &quot;#008ba6&quot;    &quot;#40516f&quot;    &quot;#58585B&quot; 
+## $lines
+##     Coral    Orange    Yellow     Green      Aqua      Blue    Purple      Pink 
+## &quot;#FF4548&quot; &quot;#F6921E&quot; &quot;#FFDA3D&quot; &quot;#8BC53F&quot; &quot;#26BBB3&quot; &quot;#00ADEE&quot; &quot;#C963FF&quot; &quot;#F291BC&quot; 
 ## 
-## $`main and additional`
-##        shale        green         teal       orange         gray bright green    sea green         blue         navy 
-##    &quot;#3e4d54&quot;    &quot;#96a821&quot;    &quot;#3fbfba&quot;    &quot;#F29C20&quot;    &quot;#beb5af&quot;    &quot;#CEDB00&quot;    &quot;#218675&quot;    &quot;#008ba6&quot;    &quot;#40516f&quot; 
-##        black 
-##    &quot;#58585B&quot; 
+## $Coral_ramp
+##      Sand     Coral 
+## &quot;#F3EFE7&quot; &quot;#FF4548&quot; 
 ## 
-## $shale_ramp
-##        &lt;NA&gt; shale_ramp5 
-##          NA   &quot;#20272b&quot; 
+## $Orange_ramp
+##      Sand    Orange 
+## &quot;#F3EFE7&quot; &quot;#F6921E&quot; 
 ## 
-## $green_ramp
-## green_ramp1 green_ramp5 
-##   &quot;#f6f0d5&quot;   &quot;#4b541d&quot; 
+## $Yellow_ramp
+##      Sand    Yellow 
+## &quot;#F3EFE7&quot; &quot;#FFDA3D&quot; 
 ## 
-## $teal_ramp
-## teal_ramp1 teal_ramp5 
-##  &quot;#d7f2f1&quot;  &quot;#1f5f5e&quot; 
+## $Green_ramp
+##      Sand     Green 
+## &quot;#F3EFE7&quot; &quot;#8BC53F&quot; 
 ## 
-## $rpg_orange_ramp
-## orange_ramp1 orange_ramp5 
-##    &quot;#fcecd3&quot;    &quot;#F29C20&quot; 
+## $Aqua_ramp
+##      Sand      Aqua 
+## &quot;#F3EFE7&quot; &quot;#26BBB3&quot; 
 ## 
-## $gray_ramp
-## gray_ramp1 gray_ramp5 
-##  &quot;#f1f0ef&quot;  &quot;#655852&quot; 
+## $Blue_ramp
+##      Sand      Blue 
+## &quot;#F3EFE7&quot; &quot;#00ADEE&quot; 
 ## 
-## $sea_green_ramp
-## sea_green_ramp1 sea_green_ramp2 
-##       &quot;#c6f2eb&quot;       &quot;#10433a&quot; 
+## $Purple_ramp
+##      Sand    Purple 
+## &quot;#F3EFE7&quot; &quot;#C963FF&quot; 
 ## 
-## $rpg_blue_ramp
-## blue_ramp1 blue_ramp5 
-##  &quot;#bff0fb&quot;  &quot;#008ba6&quot; 
+## $Pink_ramp
+##      Sand      Pink 
+## &quot;#F3EFE7&quot; &quot;#F291BC&quot; 
 ## 
-## $navy_ramp
-## navy_ramp1 navy_ramp5 
-##  &quot;#d5dbe6&quot;  &quot;#202837&quot; 
+## $cool_to_warm
+##    Orange    Yellow      Blue 
+## &quot;#F6921E&quot; &quot;#FFDA3D&quot; &quot;#00ADEE&quot; 
 ## 
-## $black_ramp
-## black_ramp1 black_ramp5 
-##   &quot;#dcddde&quot;   &quot;#2c2d2e&quot; 
-## 
-## $chartreuse_ramp
-## chartreuse_ramp1 chartreuse_ramp5 
-##        &quot;#f4f8d3&quot;        &quot;#687012&quot; 
-## 
-## $gold_ramp
-## gold_ramp1 gold_ramp5 
-##  &quot;#fffcd5&quot;  &quot;#958a00&quot; 
-## 
-## $burnt_orange_ramp
-## burnt_orange_ramp1 burnt_orange_ramp5 
-##          &quot;#fcecd3&quot;          &quot;#825109&quot; 
-## 
-## $red_ramp
-## red_ramp1 red_ramp5 
-## &quot;#fbd9de&quot; &quot;#860f21&quot; 
-## 
-## $earth_ramp
-## earth_ramp1 earth_ramp2 
-##   &quot;#f0f2da&quot;   &quot;#d9d6ce&quot; 
-## 
-## $rpg_colors
-##     rpg_1     rpg_2     rpg_3 
-## &quot;#3DBFBA&quot; &quot;#F9F963&quot; &quot;#F29F24&quot; 
-## 
-## $rpg_cold_warm
-##      cw_1      cw_2      cw_3      cw_4      cw_5 
-## &quot;#3D4E56&quot; &quot;#3DBFBA&quot; &quot;#FFFFD3&quot; &quot;#FFE607&quot; &quot;#FFAA00&quot; 
-## 
-## $rpg_rainbow
-## rainbow_1 rainbow_2 rainbow_3 rainbow_4 rainbow_5 rainbow_6 rainbow_7 rainbow_8 
-## &quot;#E0E0E0&quot; &quot;#425270&quot; &quot;#3DBFBA&quot; &quot;#95A53A&quot; &quot;#FFED28&quot; &quot;#FFAA00&quot; &quot;#ED2D46&quot; &quot;#8C50AA&quot; 
-## 
-## $rpg_rainbow_no_grey
-## rainbow_2 rainbow_3 rainbow_4 rainbow_5 rainbow_6 rainbow_7 rainbow_8 
-## &quot;#425270&quot; &quot;#3DBFBA&quot; &quot;#95A53A&quot; &quot;#FFED28&quot; &quot;#FFAA00&quot; &quot;#ED2D46&quot; &quot;#8C50AA&quot;</code></pre>
-<p>These color palettes can be inserted into ggplot graphics, examples of each palettes in ggplot are below</p>
+## $cold_to_hot
+##     Coral    Orange    Yellow      Aqua      Blue 
+## &quot;#FF4548&quot; &quot;#F6921E&quot; &quot;#FFDA3D&quot; &quot;#26BBB3&quot; &quot;#00ADEE&quot;</code></pre>
+<p>These color palettes can be inserted into ggplot graphics, examples
+of each palettes in ggplot are below</p>
 <div id="functions-included" class="section level2">
 <h2>Functions Included</h2>
 <p>This package includes four functions:</p>
-<p>-rpg_cols() -rpg_color_pal() -scale_color_rpg() -scale_fill_rpg()</p>
-<div id="rpg_cols" class="section level4">
-<h4>rpg_cols</h4>
-<p>takes a input string or group of strings and returns the hex code. The color must be one of the colors included in this package</p>
+<ul>
+<li>lcrt_cols()</li>
+<li>lcrt_color_pal()</li>
+<li>scale_color_lcrt()</li>
+<li>scale_fill_lcrt()</li>
+</ul>
+<div id="lcrt_cols" class="section level4">
+<h4>lcrt_cols</h4>
+<p>takes a input string or group of strings and returns the hex code.
+The color must be one of the colors included in this package</p>
 <div id="example" class="section level5">
 <h5>Example:</h5>
-<pre class="r"><code>rpg_cols(&quot;blue&quot;)</code></pre>
-<pre><code>##      blue 
-## &quot;#008ba6&quot;</code></pre>
-<pre class="r"><code>rpg_cols(&quot;teal&quot;, &quot;black&quot;)</code></pre>
-<pre><code>##      teal     black 
-## &quot;#3fbfba&quot; &quot;#58585B&quot;</code></pre>
+<pre class="r"><code>lcrt_cols(&quot;Ocean&quot;)</code></pre>
+<pre><code>##     Ocean 
+## &quot;#343873&quot;</code></pre>
+<pre class="r"><code>lcrt_cols(&quot;Sand&quot;, &quot;Purple&quot;)</code></pre>
+<pre><code>##      Sand    Purple 
+## &quot;#F3EFE7&quot; &quot;#C963FF&quot;</code></pre>
 </div>
 </div>
-<div id="rpg_color_pal" class="section level4">
-<h4>rpg_color_pal</h4>
-<p>Converts an input string representing a color palette into a function that can be converted into a usable color palette.</p>
-<pre class="r"><code>rpg_color_pal(&quot;rpg_cold_warm&quot;)</code></pre>
+<div id="lcrt_color_pal" class="section level4">
+<h4>lcrt_color_pal</h4>
+<p>Converts an input string representing a color palette into a function
+that can be converted into a usable color palette.</p>
+<pre class="r"><code>lcrt_color_pal(&quot;cool_to_warm&quot;)</code></pre>
 <pre><code>## function (n) 
 ## {
 ##     x &lt;- ramp(seq.int(0, 1, length.out = n))
@@ -448,18 +360,20 @@ $(document).ready(function () {
 ##         rgb(x[, 1L], x[, 2L], x[, 3L], x[, 4L], maxColorValue = 255)
 ##     else rgb(x[, 1L], x[, 2L], x[, 3L], maxColorValue = 255)
 ## }
-## &lt;bytecode: 0x000002545283cf68&gt;
-## &lt;environment: 0x0000025454d2b570&gt;</code></pre>
-<p>By adding a step count after the function it will return a usable palette</p>
-<pre class="r"><code>rpg_color_pal(&quot;rpg_cold_warm&quot;)(10)</code></pre>
-<pre><code>##  [1] &quot;#3D4E56&quot; &quot;#3D8082&quot; &quot;#3DB2AE&quot; &quot;#7DD4C2&quot; &quot;#D3F0CD&quot; &quot;#FFF9A5&quot; &quot;#FFEE4B&quot; &quot;#FFDF06&quot; &quot;#FFC403&quot; &quot;#FFAA00&quot;</code></pre>
+## &lt;bytecode: 0x000001ab2db5af28&gt;
+## &lt;environment: 0x000001ab385894b0&gt;</code></pre>
+<p>By adding a step count after the function it will return a usable
+palette</p>
+<pre class="r"><code>lcrt_color_pal(&quot;cool_to_warm&quot;)(10)</code></pre>
+<pre><code>##  [1] &quot;#F6921E&quot; &quot;#F8A224&quot; &quot;#FAB22B&quot; &quot;#FCC232&quot; &quot;#FED239&quot; &quot;#E2D450&quot; &quot;#AACB77&quot; &quot;#71C19F&quot; &quot;#38B7C6&quot; &quot;#00ADEE&quot;</code></pre>
 <p>These palettes can be reversed as needed</p>
-<pre class="r"><code>rpg_color_pal(&quot;rpg_cold_warm&quot;, reverse = TRUE)(10)</code></pre>
-<pre><code>##  [1] &quot;#FFAA00&quot; &quot;#FFC403&quot; &quot;#FFDF06&quot; &quot;#FFEE4A&quot; &quot;#FFF9A5&quot; &quot;#D3F0CD&quot; &quot;#7DD4C2&quot; &quot;#3DB2AE&quot; &quot;#3D8082&quot; &quot;#3D4E56&quot;</code></pre>
+<pre class="r"><code>lcrt_color_pal(&quot;cool_to_warm&quot;, reverse = TRUE)(10)</code></pre>
+<pre><code>##  [1] &quot;#00ADEE&quot; &quot;#38B7C6&quot; &quot;#71C19F&quot; &quot;#AACB78&quot; &quot;#E2D450&quot; &quot;#FED239&quot; &quot;#FCC232&quot; &quot;#FAB22B&quot; &quot;#F8A224&quot; &quot;#F6921E&quot;</code></pre>
 </div>
-<div id="scale_color_rpg-and-scale_fill_rpg" class="section level4">
-<h4>scale_color_rpg and scale_fill_rpg</h4>
-<p>These functions supply a fill or color to a ggplot call. See examples below.</p>
+<div id="scale_color_lcrt-and-scale_fill_lcrt" class="section level4">
+<h4>scale_color_lcrt and scale_fill_lcrt</h4>
+<p>These functions supply a fill or color to a ggplot call. See examples
+below.</p>
 </div>
 </div>
 
@@ -490,7 +404,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

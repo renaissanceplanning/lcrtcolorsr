@@ -1,12 +1,12 @@
-Package: rpgcolorsr
+Package: lcrtcolorsr
 Type: Package
-Title: Loads RPG Color palettes for visualizations in R
-Version: 0.1.5
+Title: Loads LCRT Color palettes for visualizations in R
+Version: 0.1.1
 Author: Brian Froeb
 Maintainer: Brian Froeb <BFroeb@citiesthatwork.com>
-Description: Loads RPG Color palettes for visualizations in R
+Description: Loads LCRT Color palettes for visualizations in R
     Currently supports ggplot2, mapdeck, plotly, and tmap, new packages added upon request.
 License: MIT License
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1

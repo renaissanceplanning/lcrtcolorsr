@@ -12,19 +12,27 @@
 <meta name="author" content="Brian Froeb" />
 
 
-<title>rpgcolorsr Examples</title>
+<title>lcrtcolorsr Examples</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -36,11 +44,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -53,32 +56,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -88,10 +67,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -108,40 +83,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -169,7 +120,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -181,7 +132,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -191,11 +142,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -207,13 +175,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -221,16 +188,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -274,7 +234,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -297,457 +257,396 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">rpgcolorsr Examples</h1>
+<h1 class="title toc-ignore">lcrtcolorsr Examples</h1>
 <h4 class="author">Brian Froeb</h4>
-<h4 class="date">6/29/2020</h4>
+<h4 class="date">5/12/2023</h4>
 
 </div>
 
 
 <div id="exmaples" class="section level1 tabset">
-<h1>Exmaples</h1>
+<h1 class="tabset">Exmaples</h1>
 <div id="scale-color-examples" class="section level2">
 <h2>Scale Color Examples</h2>
 <div id="discrete-palettes" class="section level3">
 <h3>Discrete Palettes</h3>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
-  scale_color_rpg(palette = &quot;logo&quot;)</code></pre>
+  scale_color_lcrt(palette = &quot;logo&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
-  scale_color_rpg(palette = &quot;additional&quot;)</code></pre>
+  scale_color_lcrt(palette = &quot;lines&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
-  scale_color_rpg(palette = &quot;main and additional&quot;)</code></pre>
+  scale_color_lcrt(palette = &quot;cool_to_warm&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
-  scale_color_rpg(palette = &quot;rpg_colors&quot;)</code></pre>
+  scale_color_lcrt(palette = &quot;cold_to_hot&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-  geom_point(size = 4) +
-  scale_color_rpg(palette = &quot;rpg_cold_warm&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-  geom_point(size = 4) +
-  scale_color_rpg(palette = &quot;rpg_rainbow&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
-<div id="discrete-palettes-1" class="section level3">
-<h3>Discrete Palettes</h3>
+<div id="continuous-palettes" class="section level3">
+<h3>Continuous Palettes</h3>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;shale_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Coral_ramp&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
+  geom_point(size = 4) +
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Orange_ramp&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
+  geom_point(size = 4) +
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Yellow_ramp&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;green_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Green_ramp&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;red_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Aqua_ramp&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;earth_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Blue_ramp&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;teal_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Purple_ramp&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;rpg_orange_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;Pink_ramp&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;sea_green_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;cool_to_warm&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;rpg_blue_ramp&quot;)</code></pre>
+  scale_color_lcrt(discrete = FALSE, palette = &quot;cold_to_hot&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;black_ramp&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;chartreuse_ramp&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;gold_ramp&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;burnt_orange_ramp&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;rpg_colors&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;rpg_cold_warm&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-  geom_point(size = 4) +
-  scale_color_rpg(discrete = FALSE, palette = &quot;rpg_rainbow&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
 </div>
 <div id="scale-fill-examples" class="section level2">
 <h2>Scale Fill Examples</h2>
-<div id="discrete-palettes-2" class="section level3">
+<div id="discrete-palettes-1" class="section level3">
 <h3>Discrete Palettes</h3>
 <pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
   geom_bar() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;logo&quot;, guide = &quot;none&quot;)</code></pre>
+  scale_fill_lcrt(palette = &quot;logo&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;lines&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;Coral_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;Orange_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;Yellow_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;Green_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;Aqua_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_lcrt(palette = &quot;Blue_ramp&quot;, guide = &quot;none&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
   geom_bar() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;additional&quot;, guide = &quot;none&quot;)</code></pre>
+  scale_fill_lcrt(palette = &quot;Purple_ramp&quot;, guide = &quot;none&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
   geom_bar() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;main and additional&quot;, guide = &quot;none&quot;)</code></pre>
+  scale_fill_lcrt(palette = &quot;Pink_ramp&quot;, guide = &quot;none&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
   geom_bar() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;shale_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+  scale_fill_lcrt(palette = &quot;cool_to_warm&quot;, guide = &quot;none&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
   geom_bar() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;green_ramp&quot;, guide = &quot;none&quot;)</code></pre>
+  scale_fill_lcrt(palette = &quot;cold_to_hot&quot;, guide = &quot;none&quot;)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;red_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;earth_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;teal_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;rpg_orange_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;gray_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;sea_green_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;rpg_blue_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;navy_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;black_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;chartreuse_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;gold_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;burnt_orange_ramp&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;rpg_colors&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;rpg_cold_warm&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;rpg_rainbow&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_rpg(palette = &quot;rpg_rainbow_no_grey&quot;, guide = &quot;none&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 </div>
 </div>
 <div id="geographic-data-with-ggplot2" class="section level2">
 <h2>Geographic Data with ggplot2</h2>
-<p>These palettes can also be used with ggplot2 to display geographic data with both continuous and discrete scales, uses the scale fill function.</p>
-<div id="discrete-palettes-3" class="section level3">
+<p>These palettes can also be used with ggplot2 to display geographic
+data with both continuous and discrete scales, uses the scale fill
+function.</p>
+<div id="discrete-palettes-2" class="section level3">
 <h3>Discrete Palettes</h3>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = province)) +
-  scale_fill_rpg(palette = &quot;logo&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;logo&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = province)) +
-  scale_fill_rpg(palette = &quot;additional&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;lines&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = province)) +
-  scale_fill_rpg(palette = &quot;main and additional&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;cool_to_warm&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = province)) +
-  scale_fill_rpg(palette = &quot;rpg_colors&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = province)) +
-  scale_fill_rpg(palette = &quot;rpg_cold_warm&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = province)) +
-  scale_fill_rpg(palette = &quot;rpg_rainbow&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;cold_to_hot&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
 <div id="continous-palettes" class="section level3">
 <h3>Continous Palettes</h3>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;logo&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Coral_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;additional&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Orange_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;main and additional&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Yellow_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;shale_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Green_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;green_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Aqua_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;red_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Blue_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;earth_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Purple_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;teal_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;Pink_ramp&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;rpg_orange_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;cool_to_warm&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(NLD_muni) +
   geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;gray_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;sea_green_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;rpg_blue_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;navy_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;black_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;chartreuse_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;gold_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;burnt_orange_ramp&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;rpg_colors&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;rpg_cold_warm&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;rpg_rainbow&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(NLD_muni) +
-  geom_sf(aes(fill = population)) +
-  scale_fill_rpg(palette = &quot;rpg_rainbow_no_grey&quot;, discrete = FALSE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+  scale_fill_lcrt(palette = &quot;cold_to_hot&quot;, discrete = FALSE)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
 </div>
 </div>
 <div id="geographic-data-with-tmap" class="section level2">
 <h2>Geographic Data with tmap</h2>
-<p>tmap uses a differing syntax from ggplot however by using the rpg_color_pal function, with a step count indicated, and saving the output to an object these palettes can be used in tmap.</p>
-<div id="discrete-palettes-4" class="section level3">
+<p>tmap uses a differing syntax from ggplot however by using the
+lcrt_color_pal function, with a step count indicated, and saving the
+output to an object these palettes can be used in tmap.</p>
+<div id="discrete-palettes-3" class="section level3">
 <h3>Discrete Palettes</h3>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;logo&quot;)(10)
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;logo&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;province&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;additional&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;lines&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;province&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;main and additional&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;province&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_colors&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;cool_to_warm&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;province&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_cold_warm&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;cold_to_hot&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;province&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-75-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_rainbow&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;province&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
 </div>
 <div id="continous-palettes-1" class="section level3">
 <h3>Continous Palettes</h3>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;logo&quot;)(10)
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Coral_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;additional&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Orange_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;main and additional&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Yellow_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;shale_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Green_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;green_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Aqua_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;red_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Blue_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;earth_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Purple_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-83-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;teal_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;Pink_ramp&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_orange_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;cool_to_warm&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-85-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;gray_ramp&quot;)(10)
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<pre class="r"><code>MyPal &lt;- lcrt_color_pal(&quot;cold_to_hot&quot;)(10)
 tm_shape(NLD_muni) +
   tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-86-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;sea_green_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-87-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_blue_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-88-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;navy_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-89-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;black_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-90-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;chartreuse_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-91-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;gold_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-92-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;burnt_orange_ramp&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_colors&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_cold_warm&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal) </code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-95-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_rainbow&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-96-1.png" width="672" /></p>
-<pre class="r"><code>MyPal &lt;- rpg_color_pal(&quot;rpg_rainbow_no_grey&quot;)(10)
-tm_shape(NLD_muni) +
-  tm_polygons(&quot;population&quot;, palette = MyPal)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<p><img src="examples_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
 </div>
 </div>
 </div>
@@ -779,7 +678,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

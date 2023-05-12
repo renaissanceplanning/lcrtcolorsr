@@ -1,7 +1,7 @@
 ---
-title: "rpgcolorsr User Guide"
+title: "lcrtcolorsr Examples"
 author: "Brian Froeb"
-date: "6/29/2020"
+date: "5/12/2023"
 output: html_document
 editor_options: 
   chunk_output_type: inline
@@ -9,18 +9,18 @@ editor_options:
 ```{r echo=FALSE}
 library(ggplot2)
 library(tmap)
-library(rpgcolorsr)
+library(lcrtcolorsr)
 data(NLD_muni)
 ```
 
 There are currently 71 colors included in this package the color names and their hex codes are below
 ```{r, echo=FALSE}
-rpg_color_list
+lcrt_color_list
 ```
 
 These are grouped into 20 color palettes, the colors included in each palette and their hex codes are below
 ```{r, echo=FALSE}
-rpg_color_palettes
+lcrt_color_palettes
 ```
 
 These color palettes can be inserted into ggplot graphics, examples of each palettes in ggplot are below
@@ -29,43 +29,43 @@ These color palettes can be inserted into ggplot graphics, examples of each pale
 
 This package includes four functions:
 
--rpg_cols()
--rpg_color_pal()
--scale_color_rpg()
--scale_fill_rpg()
+- lcrt_cols()
+- lcrt_color_pal()
+- scale_color_lcrt()
+- scale_fill_lcrt()
 
-#### rpg_cols
+#### lcrt_cols
 takes a input string or group of strings and returns the hex code. 
 The color must be one of the colors included in this package
 
 ##### Example:
 ```{r}
-rpg_cols("blue")
+lcrt_cols("Ocean")
 
-rpg_cols("teal", "black")
+lcrt_cols("Sand", "Purple")
 ```
 
-#### rpg_color_pal
+#### lcrt_color_pal
 
 Converts an input string representing a color palette into a function that can be converted into a usable color palette.
 
 ```{r}
-rpg_color_pal("rpg_cold_warm")
+lcrt_color_pal("cool_to_warm")
 ```
 
 By adding a step count after the function it will return a usable palette
 
 ```{r}
-rpg_color_pal("rpg_cold_warm")(10)
+lcrt_color_pal("cool_to_warm")(10)
 ```
 
 These palettes can be reversed as needed
 
 ```{r}
-rpg_color_pal("rpg_cold_warm", reverse = TRUE)(10)
+lcrt_color_pal("cool_to_warm", reverse = TRUE)(10)
 ```
 
-#### scale_color_rpg and scale_fill_rpg
+#### scale_color_lcrt and scale_fill_lcrt
 
 These functions supply a fill or color to a ggplot call. See examples below.
 
